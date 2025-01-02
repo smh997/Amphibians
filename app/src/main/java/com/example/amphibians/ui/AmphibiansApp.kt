@@ -14,23 +14,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.amphibians.R
+import com.example.amphibians.ui.screens.HomeScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AmphibiansApp(modifier: Modifier = Modifier) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    Scaffold (
+    Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { AmphibiansTopAppBar(scrollBehavior) }
     ) { innerPadding ->
-        Surface (
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        ){
-
+        ) {
+            val amphibiansViewModel: AmphibiansViewModel = viewModel()
+            HomeScreen(
+                amphibiansUiState = amphibiansViewModel.amphibiansUiState,
+                contentPadding = innerPadding
+            )
         }
     }
 }

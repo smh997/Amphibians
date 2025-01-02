@@ -6,12 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.amphibians.data.NetworkAmphibiansRepository
+import com.example.amphibians.network.Amphibian
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface AmphibiansUiState{
-    data class Success(val msg: String): AmphibiansUiState
+    data class Success(val amphibians: List<Amphibian>): AmphibiansUiState
     data object Error: AmphibiansUiState
     data object Loading: AmphibiansUiState
 }
@@ -27,7 +29,8 @@ class AmphibiansViewModel() : ViewModel(){
     private fun getAmphibians(){
         viewModelScope.launch {
             amphibiansUiState = try {
-                AmphibiansUiState.Success("success")
+                val amphibiansRepository = NetworkAmphibiansRepository()
+                AmphibiansUiState.Success(amphibiansRepository.getAmphibians())
             } catch (e: IOException){
                 AmphibiansUiState.Error
             } catch (e: HttpException){

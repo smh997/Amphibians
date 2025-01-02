@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.amphibians.R
+import com.example.amphibians.network.Amphibian
 import com.example.amphibians.ui.AmphibiansUiState
 import com.example.amphibians.ui.theme.AmphibiansTheme
 
@@ -29,7 +30,7 @@ fun HomeScreen(
         is AmphibiansUiState.Error -> ErrorScreen(modifier.fillMaxSize())
         is AmphibiansUiState.Loading -> LoadingScreen(modifier.fillMaxSize())
         is AmphibiansUiState.Success -> AmphibiansListScreen(
-            amphibiansList = amphibiansUiState.msg,
+            amphibiansList = amphibiansUiState.amphibians,
             modifier = modifier,
             contentPadding = contentPadding
         )
@@ -62,11 +63,11 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun AmphibiansListScreen(
-    amphibiansList: String,
+    amphibiansList: List<Amphibian>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    Text(text = amphibiansList, modifier = Modifier.padding(16.dp))
+    Text(text = amphibiansList.toString(), modifier = Modifier.padding(16.dp))
 }
 
 @Preview(showBackground = true)

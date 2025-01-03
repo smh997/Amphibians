@@ -1,7 +1,6 @@
 package com.example.amphibians.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -30,7 +29,6 @@ fun AmphibiansApp(modifier: Modifier = Modifier) {
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
         ) {
             val amphibiansViewModel: AmphibiansViewModel = viewModel()
             HomeScreen(

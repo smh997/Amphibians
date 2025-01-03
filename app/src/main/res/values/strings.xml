@@ -5,4 +5,5 @@
     <string name="retry">Retry</string>
     <string name="loading">Loading</string>
     <string name="connection_error">Connection Error</string>
+    <string name="amphibian_title">%1$s (%2$s)</string>
 </resources>

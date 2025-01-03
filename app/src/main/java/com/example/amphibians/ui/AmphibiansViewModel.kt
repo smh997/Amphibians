@@ -5,8 +5,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import com.example.amphibians.data.NetworkAmphibiansRepository
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.amphibians.AmphibiansApplication
+import com.example.amphibians.data.AmphibiansRepository
 import com.example.amphibians.network.Amphibian
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -18,7 +23,7 @@ sealed interface AmphibiansUiState{
     data object Loading: AmphibiansUiState
 }
 
-class AmphibiansViewModel() : ViewModel(){
+class AmphibiansViewModel(val amphibiansRepository: AmphibiansRepository) : ViewModel(){
     var amphibiansUiState: AmphibiansUiState by mutableStateOf(AmphibiansUiState.Loading)
         private set
 
@@ -29,12 +34,20 @@ class AmphibiansViewModel() : ViewModel(){
     private fun getAmphibians(){
         viewModelScope.launch {
             amphibiansUiState = try {
-                val amphibiansRepository = NetworkAmphibiansRepository()
                 AmphibiansUiState.Success(amphibiansRepository.getAmphibians())
             } catch (e: IOException){
                 AmphibiansUiState.Error
             } catch (e: HttpException){
                 AmphibiansUiState.Error
+            }
+        }
+    }
+
+    companion object{
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as AmphibiansApplication)
+                AmphibiansViewModel(amphibiansRepository = application.container.amphibiansRepository)
             }
         }
     }
